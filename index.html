@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SmartStay — Login</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --navy:    #0b1d35;
+      --navy2:   #0d2545;
+      --blue:    #1a6fc4;
+      --sky:     #38bdf8;
+      --sky-l:   #bae6fd;
+      --white:   #f0f9ff;
+      --grey:    #94a3b8;
+      --grey-l:  #e2e8f0;
+      --card:    rgba(13,37,69,0.75);
+      --success: #22c55e;
+      --danger:  #f87171;
+    }
+
+    * { margin:0; padding:0; box-sizing:border-box; }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--navy);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+      padding: 20px;
+    }
+
+    /* ---- BG grid ---- */
+    .bg-grid {
+      position: absolute; inset: 0; z-index: 0;
+      background-image:
+        linear-gradient(rgba(56,189,248,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(56,189,248,0.04) 1px, transparent 1px);
+      background-size: 40px 40px;
+      animation: gridMove 20s linear infinite;
+    }
+    @keyframes gridMove {
+      0%  { background-position: 0 0; }
+      100%{ background-position: 40px 40px; }
+    }
+
+    /* ---- Glow orbs ---- */
+    .orb {
+      position: absolute; border-radius: 50%;
+      filter: blur(80px); opacity: 0.18; z-index: 0;
+      animation: orbPulse 8s ease-in-out infinite;
+    }
+    .orb1 { width:400px; height:400px; background:#1a6fc4; top:-10%; left:-10%; animation-delay:0s; }
+    .orb2 { width:350px; height:350px; background:#38bdf8; bottom:-5%; right:-5%; animation-delay:3s; }
+    .orb3 { width:250px; height:250px; background:#0ea5e9; top:40%; left:60%; animation-delay:6s; }
+    @keyframes orbPulse {
+      0%,100% { transform: scale(1); }
+      50%      { transform: scale(1.15); }
+    }
+
+    /* ---- floating icons ---- */
+    .float-icon {
+      position: absolute; font-size: 3rem;
+      color: rgba(56,189,248,0.06);
+      animation: floatAround 18s linear infinite;
+      z-index: 0;
+    }
+    @keyframes floatAround {
+      0%   { transform: translateY(110vh) rotate(0deg); }
+      100% { transform: translateY(-10vh) rotate(360deg); }
+    }
+
+    /* ---- Login card ---- */
+    .card {
+      position: relative; z-index: 10;
+      background: var(--card);
+      border: 1px solid rgba(56,189,248,0.18);
+      border-radius: 20px;
+      padding: 44px 40px 36px;
+      width: 100%; max-width: 440px;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 24px 64px rgba(0,0,0,0.45), 0 0 0 1px rgba(56,189,248,0.08);
+      animation: cardIn 0.7s cubic-bezier(0.22,1,0.36,1);
+    }
+    @keyframes cardIn {
+      from { opacity:0; transform: translateY(30px) scale(0.97); }
+      to   { opacity:1; transform: translateY(0) scale(1); }
+    }
+    .card:hover {
+      box-shadow: 0 28px 72px rgba(0,0,0,0.5), 0 0 40px rgba(56,189,248,0.12);
+      transition: box-shadow 0.4s;
+    }
+
+    /* ---- Header ---- */
+    .logo-wrap {
+      display: flex; align-items: center; justify-content: center;
+      gap: 12px; margin-bottom: 8px;
+    }
+    .logo-icon {
+      width: 54px; height: 54px; border-radius: 14px;
+      background: linear-gradient(135deg, var(--blue), var(--sky));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem; color: #fff;
+      box-shadow: 0 4px 20px rgba(56,189,248,0.4);
+      animation: iconPulse 3s ease-in-out infinite;
+    }
+    @keyframes iconPulse {
+      0%,100% { box-shadow: 0 4px 20px rgba(56,189,248,0.4); }
+      50%      { box-shadow: 0 4px 32px rgba(56,189,248,0.7); }
+    }
+    .logo-text {
+      font-size: 2rem; font-weight: 800; letter-spacing: -0.5px;
+      background: linear-gradient(to right, var(--sky-l), var(--sky));
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .subtitle {
+      text-align: center; font-size: 0.9rem;
+      color: var(--grey); margin-bottom: 32px; letter-spacing: 0.02em;
+    }
+
+    /* ---- Divider line ---- */
+    .divider {
+      height: 1px; background: linear-gradient(to right, transparent, rgba(56,189,248,0.25), transparent);
+      margin-bottom: 28px;
+    }
+
+    /* ---- Form ---- */
+    .field { margin-bottom: 20px; position: relative; }
+    .field label {
+      display: block; font-size: 0.8rem; font-weight: 600;
+      color: var(--sky-l); margin-bottom: 8px; letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .field-inner {
+      position: relative; display: flex; align-items: center;
+    }
+    .field-inner i {
+      position: absolute; left: 14px; font-size: 0.95rem; color: var(--grey);
+      transition: color 0.3s;
+    }
+    .field input {
+      width: 100%; padding: 13px 14px 13px 42px;
+      background: rgba(11,29,53,0.7);
+      border: 1px solid rgba(56,189,248,0.15);
+      border-radius: 10px; color: var(--white);
+      font-family: 'Outfit', sans-serif; font-size: 0.95rem;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .field input::placeholder { color: var(--grey); }
+    .field input:focus {
+      outline: none;
+      border-color: var(--sky);
+      box-shadow: 0 0 0 3px rgba(56,189,248,0.12);
+    }
+    .field input:focus ~ i,
+    .field-inner:focus-within i { color: var(--sky); }
+
+    /* ---- Button ---- */
+    .btn-login {
+      width: 100%; padding: 14px;
+      background: linear-gradient(135deg, var(--blue), var(--sky));
+      border: none; border-radius: 10px;
+      font-family: 'Outfit', sans-serif; font-size: 1rem; font-weight: 700;
+      color: #fff; cursor: pointer; letter-spacing: 0.04em;
+      position: relative; overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 20px rgba(56,189,248,0.3);
+    }
+    .btn-login:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(56,189,248,0.45);
+    }
+    .btn-login:active { transform: translateY(0); }
+    .btn-login::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+      transform: translateX(-100%); transition: transform 0.5s;
+    }
+    .btn-login:hover::after { transform: translateX(100%); }
+
+    /* ---- Error ---- */
+    .error {
+      color: var(--danger); font-size: 0.85rem; text-align: center;
+      margin-top: 14px; display: none; padding: 10px;
+      background: rgba(248,113,113,0.08); border-radius: 8px;
+      border: 1px solid rgba(248,113,113,0.2);
+    }
+
+    /* ---- Feature pills ---- */
+    .pills {
+      display: flex; justify-content: center; gap: 10px;
+      flex-wrap: wrap; margin-top: 28px; padding-top: 20px;
+      border-top: 1px solid rgba(56,189,248,0.1);
+    }
+    .pill {
+      display: flex; align-items: center; gap: 6px;
+      background: rgba(56,189,248,0.07);
+      border: 1px solid rgba(56,189,248,0.12);
+      border-radius: 20px; padding: 6px 14px;
+      font-size: 0.78rem; color: var(--sky-l);
+      font-weight: 500; transition: background 0.2s;
+    }
+    .pill:hover { background: rgba(56,189,248,0.14); }
+    .pill i { color: var(--sky); font-size: 0.75rem; }
+
+    /* ---- Footer ---- */
+    .foot {
+      text-align: center; margin-top: 20px;
+      font-size: 0.75rem; color: rgba(148,163,184,0.5);
+    }
+
+    /* ---- Shake ---- */
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      15%,45%,75% { transform: translateX(-8px); }
+      30%,60%,90% { transform: translateX(8px); }
+    }
+    .shake { animation: shake 0.5s ease; }
+
+    @media (max-width: 480px) {
+      .card { padding: 32px 22px 28px; }
+      .logo-text { font-size: 1.7rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-grid"></div>
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="orb orb3"></div>
+
+  <div class="float-icon" style="left:8%; animation-duration:22s;"><i class="fas fa-bed"></i></div>
+  <div class="float-icon" style="left:80%; animation-duration:17s; animation-delay:4s;"><i class="fas fa-wifi"></i></div>
+  <div class="float-icon" style="left:45%; animation-duration:28s; animation-delay:9s;"><i class="fas fa-microchip"></i></div>
+  <div class="float-icon" style="left:25%; animation-duration:20s; animation-delay:2s;"><i class="fas fa-bolt"></i></div>
+
+  <div class="card" id="loginCard">
+    <div class="logo-wrap">
+      <div class="logo-icon"><i class="fas fa-hotel"></i></div>
+      <span class="logo-text">SmartStay</span>
+    </div>
+    <p class="subtitle">IoT Smart Room Energy Management System</p>
+    <div class="divider"></div>
+
+    <div class="field">
+      <label>Email Address</label>
+      <div class="field-inner">
+        <i class="fas fa-envelope"></i>
+        <input type="email" id="email" placeholder="your@email.com" autocomplete="off"/>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Password</label>
+      <div class="field-inner">
+        <i class="fas fa-lock"></i>
+        <input type="password" id="password" placeholder="••••••••"/>
+      </div>
+    </div>
+
+    <button class="btn-login" id="loginBtn">
+      <i class="fas fa-sign-in-alt"></i>&nbsp; Sign In
+    </button>
+    <div class="error" id="errMsg"><i class="fas fa-exclamation-circle"></i> Invalid credentials. Please try again.</div>
+
+    <div class="pills">
+      <div class="pill"><i class="fas fa-shield-alt"></i> Secure</div>
+      <div class="pill"><i class="fas fa-chart-line"></i> Analytics</div>
+      <div class="pill"><i class="fas fa-bell"></i> Alerts</div>
+      <div class="pill"><i class="fas fa-sliders-h"></i> Controls</div>
+    </div>
+
+    <div class="foot">© 2025 SmartStay · Room 101 · IoT System</div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey:            "AIzaSyDyXsxhrzwbtFBey7j5elnjg6y5IuuncTo",
+      authDomain:        "smartstay-12955.firebaseapp.com",
+      databaseURL:       "https://smartstay-12955-default-rtdb.firebaseio.com",
+      projectId:         "smartstay-12955",
+      storageBucket:     "smartstay-12955.firebasestorage.app",
+      messagingSenderId: "13402715231",
+      appId:             "1:13402715231:web:807a9f50d24721f4c5d7ea"
+    };
+
+    const app  = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    document.getElementById('loginBtn').addEventListener('click', () => {
+      const email    = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const errMsg   = document.getElementById('errMsg');
+      const card     = document.getElementById('loginCard');
+
+      errMsg.style.display = 'none';
+
+      if (!email || !password) {
+        errMsg.innerHTML = '<i class="fas fa-exclamation-circle"></i> Please fill in all fields.';
+        errMsg.style.display = 'block';
+        return;
+      }
+
+      const btn = document.getElementById('loginBtn');
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>&nbsp; Signing in…';
+      btn.disabled  = true;
+
+      signInWithEmailAndPassword(auth, email, password)
+        .then(() => {
+          // Check if the email ends with @user.com → guest user, else admin
+          if (email.toLowerCase().endsWith('@user.com')) {
+            window.location.href = 'smartstay_dashboard.html?role=user';
+          } else {
+            window.location.href = 'smartstay_dashboard.html?role=admin';
+          }
+        })
+        .catch(() => {
+          errMsg.innerHTML = '<i class="fas fa-exclamation-circle"></i> Invalid credentials. Please try again.';
+          errMsg.style.display = 'block';
+          card.classList.add('shake');
+          setTimeout(() => card.classList.remove('shake'), 500);
+          btn.innerHTML = '<i class="fas fa-sign-in-alt"></i>&nbsp; Sign In';
+          btn.disabled  = false;
+        });
+    });
+
+    document.getElementById('password').addEventListener('keydown', e => {
+      if (e.key === 'Enter') document.getElementById('loginBtn').click();
+    });
+  </script>
+</body>
+</html>
