@@ -891,21 +891,7 @@
 
     <!-- 6 stat cards: entries, exits, doors, occupied, lights, fan -->
     <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-bottom:20px">
-      <div class="stat-card">
-        <div class="label"><i class="fas fa-sign-in-alt"></i> Entries</div>
-        <div class="value blue" id="r-entries">--</div>
-        <div class="sub">Today</div>
-      </div>
-      <div class="stat-card">
-        <div class="label"><i class="fas fa-sign-out-alt"></i> Exits</div>
-        <div class="value blue" id="r-exits">--</div>
-        <div class="sub">Today</div>
-      </div>
-      <div class="stat-card">
-        <div class="label"><i class="fas fa-door-open"></i> Door Opens</div>
-        <div class="value white" id="r-doors">--</div>
-        <div class="sub">Today</div>
-      </div>
+
       <div class="stat-card">
         <div class="label"><i class="fas fa-clock"></i> Occupied</div>
         <div class="value white" id="r-occTime">0s</div>
@@ -1509,18 +1495,7 @@
       const sessionNote = hasDailyStats ? '' : ' <span style="font-size:0.65rem;color:var(--grey)">(session)</span>';
 
       tbody.innerHTML = `
-        <tr>
-          <td>Total Entries</td>
-          <td style="font-family:'Space Mono',monospace;color:var(--sky)">${hasDailyStats ? s.totalEntries : '--'} <span style="font-size:0.72rem;color:var(--grey)">people</span></td>
-        </tr>
-        <tr>
-          <td>Total Exits</td>
-          <td style="font-family:'Space Mono',monospace;color:var(--sky)">${hasDailyStats ? s.totalExits : '--'} <span style="font-size:0.72rem;color:var(--grey)">people</span></td>
-        </tr>
-        <tr>
-          <td>Door Opened</td>
-          <td style="font-family:'Space Mono',monospace;color:var(--warning)">${hasDailyStats ? s.doorOpenedCount : '--'} <span style="font-size:0.72rem;color:var(--grey)">times</span></td>
-        </tr>
+
         <tr>
           <td>Fan On Duration${sessionNote}</td>
           <td style="font-family:'Space Mono',monospace;color:var(--success)" id="st-fanDur">${fanFmt}</td>
